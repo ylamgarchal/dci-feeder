@@ -1,6 +1,6 @@
 # Distributed CI Feeder
 
-## Installation
+## Installation on host
 
 ### Install RabbitMQ server
 
@@ -55,24 +55,43 @@ RabbitMQ will listen to "localhost:5672" by default.
 [2019-10-24 02:51:49,454: INFO/MainProcess] celery@Bouceka ready.
 ```
 
+### Installation on Docker
+
+Dci-feeder can be run from within Docker with Docker-compose.
+
+```console
+[yassine@Bouceka dci-feeder]$ cd docker-compose
+[yassine@Bouceka dci-compose]$ docker-compose -f dcifeeder.yml up
+```
+
 ### Test the Feeder API
 
 ```console
-[yassine@Bouceka dci-feeder]$ http POST http://127.0.0.1:5000/rhel/rhel-8.2
+[yassine@Bouceka dci-feeder]$ curl -XPOST -i http://127.0.0.1:5000/rhel/rhel-8.2
 HTTP/1.0 201 CREATED
-Content-Length: 76
 Content-Type: application/json
-Date: Thu, 24 Oct 2019 00:53:47 GMT
-Server: Werkzeug/0.14.1 Python/2.7.15
+Content-Length: 79
+Server: Werkzeug/0.16.0 Python/2.7.5
+Date: Sat, 26 Oct 2019 16:25:59 GMT
 
 {
-    "event": "SYNC_STARTED",
-    "task_id": "task_id",
-    "topic": "rhel-8.2"
+  "event": "SYNC_STARTED", 
+  "task_id": "task_id", 
+  "topic": "rhel-8.2"
 }
 ```
 
-## Workflow
+### Running the tests
+
+To run the tests in the docker compose environment, you have to first log in to
+the API container and run the "tox" command:
+
+```console
+[yassine@Bouceka dci-feeder]$ docker exec -it feeder_api bash
+[root@73ddc020cd43 dci-feeder]# tox
+```
+
+### Workflow
 
   1. The client send a REST request to the Feeder API for running a sync.
      - POST /rhel/rhel-8.2 component_name=rhel-8.2231019

@@ -16,7 +16,9 @@
 # under the License.
 
 from dcifeeder import app
+from dcifeeder import settings as s
+
 
 if __name__ == '__main__':
     feederapp = app.create_app()
-    feederapp.run(debug=False, threaded=True, host='0.0.0.0')
+    feederapp.run(debug=s.API_DEBUG, threaded=True, host='0.0.0.0')

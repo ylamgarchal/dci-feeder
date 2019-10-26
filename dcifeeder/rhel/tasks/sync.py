@@ -28,6 +28,6 @@ LOG = get_task_logger(__name__)
 def sync(topic_name):
     LOG.info("sync topic %s" % topic_name)
     time.sleep(1)
-    requests.post("%s/rhel/_events" % s.FLASK_API_URL,
+    requests.post("%s/rhel/_events" % s.API_URL,
                   json={"event": "SYNC_SUCCESS",
                         "topic": topic_name})

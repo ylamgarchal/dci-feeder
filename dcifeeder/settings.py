@@ -22,6 +22,7 @@ CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL',
 
 CELERY_PROJECT_NAME = os.getenv('CELERY_PROJECT_NAME', 'dcifeeder')
 
-FLASK_API_URL = os.getenv('FLASK_API_URL', 'http://127.0.0.1:5000')
+API_URL = os.getenv('API_URL', 'http://127.0.0.1:5000')
+API_DEBUG = os.getenv('API_DEBUG', False)
 
 LOGLEVEL = logging.DEBUG
