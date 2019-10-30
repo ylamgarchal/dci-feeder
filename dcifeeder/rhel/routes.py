@@ -23,12 +23,13 @@ import logging
 LOG = logging.getLogger(__name__)
 
 
-@bp.route("/<topic_name>", methods=["POST"])
-def sync(topic_name):
-    rhel_sync.sync.delay(topic_name)
+@bp.route("/sync", methods=["POST"])
+def sync():
+    topic = flask.request.json.get("topic")
+    rhel_sync.sync.delay(topic)
     return flask.jsonify(
         {"event": "SYNC_STARTED",
-         "topic": topic_name,
+         "topic": topic,
          "task_id": "task_id"}), 201
 
 
