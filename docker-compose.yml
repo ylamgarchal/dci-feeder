@@ -29,3 +29,14 @@ services:
       - "5000:5000"
     volumes:
       - ./:/opt/dci-feeder:Z
+  rsyncd_sshd:
+    container_name: feeder_rsyncd_sshd
+    build:
+      dockerfile: docker-compose/rsyncd_sshd/Dockerfile
+      context: ./
+    ports:
+      - "873:873"
+      - "22:22"
+    volumes:
+      - ./:/opt/dci-feeder:Z
+      - /home/yassine/.ssh/authorized_keys:/root/.ssh/authorized_keys

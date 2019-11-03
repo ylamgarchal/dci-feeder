@@ -1,61 +1,8 @@
 # Distributed CI Feeder
 
-## Installation on host
+## All in one setup
 
-### Install RabbitMQ server
-
-```console
-[yassine@Bouceka dci-feeder]$ sudo dnf install -y rabbitmq-server.noarch
-[yassine@Bouceka dci-feeder]$ sudo systemctl start rabbitmq-server
-```
-
-RabbitMQ will listen to "localhost:5672" by default.
-
-### Install Celery
-```console
-[yassine@Bouceka dci-feeder]$ sudo dnf install -y python2-celery.noarch python3-celery.noarch
-```
-
-## Run full workflow
-
-### Run local dev server
-
-```console
-[yassine@Bouceka dci-feeder]$ ./bin/runserver.py
- * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
-```
-
-### Run local worker
-
-```console
-[yassine@Bouceka dci-feeder]$ celery -A dcifeeder.celery_app:app worker --loglevel=info
-
- -------------- celery@Bouceka v4.2.1 (windowlicker)
----- **** ----- 
---- * ***  * -- Linux-4.20.13-200.fc29.x86_64-x86_64-with-fedora-29-Twenty_Nine 2019-10-24 02:51:48
--- * - **** --- 
-- ** ---------- [config]
-- ** ---------- .> app:         dcifeeder:0x7f7288a71c90
-- ** ---------- .> transport:   amqp://guest:**@localhost:5672//
-- ** ---------- .> results:     disabled://
-- *** --- * --- .> concurrency: 4 (prefork)
--- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
---- ***** ----- 
- -------------- [queues]
-                .> celery           exchange=celery(direct) key=celery
-                
-
-[tasks]
-  . dcifeeder.common.tasks.notifications.send_mails
-  . dcifeeder.rhel.tasks.sync.sync
-
-[2019-10-24 02:51:48,413: INFO/MainProcess] Connected to amqp://guest:**@127.0.0.1:5672//
-[2019-10-24 02:51:48,422: INFO/MainProcess] mingle: searching for neighbors
-[2019-10-24 02:51:49,442: INFO/MainProcess] mingle: all alone
-[2019-10-24 02:51:49,454: INFO/MainProcess] celery@Bouceka ready.
-```
-
-### Installation on Docker
+### Running the dci feeder on Docker compose
 
 Dci-feeder can be run from within Docker with Docker-compose.
 
@@ -63,7 +10,9 @@ Dci-feeder can be run from within Docker with Docker-compose.
 [yassine@Bouceka dci-feeder]$ docker-compose  up
 ```
 
-### Test the Feeder API
+### Test the feeder API
+
+On the host you can run the following command:
 
 ```console
 [yassine@Bouceka dci-feeder]$ http POST http://127.0.0.1:5000/rhel/sync topic=rhel-8.2
@@ -82,8 +31,8 @@ Server: Werkzeug/0.16.0 Python/2.7.5
 
 ### Running the tests
 
-To run the tests in the docker compose environment, you have to first log in to
-the API container and run the "tox" command:
+To run the tests you have to first log in to
+the "feeder_api" container and run the "tox" command:
 
 ```console
 [yassine@Bouceka dci-feeder]$ docker exec -it feeder_api bash
