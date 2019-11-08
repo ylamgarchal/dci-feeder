@@ -14,5 +14,8 @@ RUN yum -y install rsync openssh-server.x86_64 && \
 RUN ssh-keygen -A
 
 RUN mkdir /root/.ssh
+COPY docker-compose/ssh-keys/id_rsa.pub /root/.ssh/authorized_keys
+RUN chmod 400 /root/.ssh/authorized_keys
+RUN chown root:root /root/.ssh/authorized_keys
 
 ENTRYPOINT /opt/dci-feeder/docker-compose/rsyncd_sshd/entrypoint.sh

@@ -2,6 +2,7 @@ version: '3.7'
 services:
   rabbitmq:
     container_name: feeder_rabbitmq
+    hostname: feeder_rabbitmq
     build:
       dockerfile: docker-compose/rabbitmq/Dockerfile
       context: ./
@@ -9,6 +10,7 @@ services:
       - "5672:5672"
   worker:
     container_name: feeder_worker
+    hostname: feeder_worker
     build:
       dockerfile: docker-compose/worker/Dockerfile
       context: ./
@@ -19,6 +21,7 @@ services:
       - ./:/opt/dci-feeder:Z
   api:
     container_name: feeder_api
+    hostname: feeder_api
     build:
       dockerfile: docker-compose/api/Dockerfile
       context: ./
@@ -31,6 +34,7 @@ services:
       - ./:/opt/dci-feeder:Z
   rsyncd_sshd:
     container_name: feeder_rsyncd_sshd
+    hostname: feeder_rsyncd_sshd
     build:
       dockerfile: docker-compose/rsyncd_sshd/Dockerfile
       context: ./
@@ -39,4 +43,3 @@ services:
       - "22:22"
     volumes:
       - ./:/opt/dci-feeder:Z
-      - /home/yassine/.ssh/authorized_keys:/root/.ssh/authorized_keys
