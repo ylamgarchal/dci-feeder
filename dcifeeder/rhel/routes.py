@@ -17,8 +17,10 @@
 from dcifeeder.common.tasks import notifications
 from dcifeeder.rhel import bp
 from dcifeeder.rhel.tasks import sync as rhel_sync
+
 import flask
 import logging
+import uuid
 
 LOG = logging.getLogger(__name__)
 
@@ -26,26 +28,36 @@ LOG = logging.getLogger(__name__)
 @bp.route("/sync", methods=["POST"])
 def sync():
     topic = flask.request.json.get("topic")
-    rhel_sync.sync.delay(topic)
-    return flask.jsonify(
-        {"event": "SYNC_STARTED",
-         "topic": topic,
-         "task_id": "task_id"}), 201
+    task_id = str(uuid.uuid4())
+    rhel_sync.sync.delay(topic, task_id)
+    with open("/opt/%s" % task_id, "w") as f:
+        f.write("SYNC_STARTED")
+        return flask.jsonify(
+            {"event": "SYNC_STARTED",
+             "topic": topic,
+             "task_id": task_id}), 201
 
 
 @bp.route("/status/<task_id>", methods=["GET"])
 def get_task_status(task_id):
-    return flask.jsonify(
-        {"task_id": "task_id",
-         "status": "PENDING"}), 200
+    with open("/opt/%s" % task_id, "r") as f:
+        status = f.read()
+        return flask.jsonify(
+            {"task_id": task_id,
+             "status": status}), 200
 
 
 @bp.route("/_events", methods=["POST"])
 def handle_events():
     payload = flask.request.json
-    if payload["event"] == "SYNC_SUCCESS":
-        LOG.info("rhel topic %s sync succeed" % payload["topic"])
+    event = payload["event"]
+    if event == "SYNC_SUCCESS":
+        task_id = payload['task_id']
+        LOG.info("rhel topic %s sync succeed, task_id=%s" % (payload["topic"],
+                                                             task_id))
         LOG.info("send notifications by mails")
+        with open("/opt/%s" % task_id, "w") as f:
+            f.write(event)
         notifications.send_mails.delay({})
 
     return flask.jsonify(

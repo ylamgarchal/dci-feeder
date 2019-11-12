@@ -18,4 +18,9 @@ COPY docker-compose/ssh-keys/id_rsa.pub /root/.ssh/authorized_keys
 RUN chmod 400 /root/.ssh/authorized_keys
 RUN chown root:root /root/.ssh/authorized_keys
 
+RUN chown -R root:root /root
+RUN chown -R root:root /var
+
+RUN mkdir /opt/compose
+
 ENTRYPOINT /opt/dci-feeder/docker-compose/rsyncd_sshd/entrypoint.sh

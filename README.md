@@ -31,12 +31,19 @@ Server: Werkzeug/0.16.0 Python/2.7.5
 
 ### Running the tests
 
-To run the tests you have to first log in to
+To run the unit tests you have to first log in to
 the "feeder_api" container and run the "tox" command:
 
 ```console
 [yassine@Bouceka dci-feeder]$ docker exec -it feeder_api bash
-[root@73ddc020cd43 dci-feeder]# tox
+[root@feeder_api dci-feeder]# tox
+```
+
+There is a specific tox target tor the end to end tests:
+
+```console
+[yassine@Bouceka dci-feeder]$ docker exec -it feeder_api bash
+[root@feeder_api dci-feeder]# tox -e e2e
 ```
 
 ### Workflow
