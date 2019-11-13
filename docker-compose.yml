@@ -1,6 +1,6 @@
 version: '3.7'
 services:
-  rabbitmq:
+  feeder_rabbitmq:
     container_name: feeder_rabbitmq
     hostname: feeder_rabbitmq
     build:
@@ -8,7 +8,7 @@ services:
       context: ./
     ports:
       - "5672:5672"
-  worker:
+  feeder_worker:
     container_name: feeder_worker
     hostname: feeder_worker
     build:
@@ -16,10 +16,10 @@ services:
       context: ./
     environment:
       - CELERY_BROKER_URL=amqp://guest:guest@feeder_rabbitmq:5672//
-      - API_URL=http://api:5000
+      - API_URL=http://feeder_api:5000
     volumes:
       - ./:/opt/dci-feeder:Z
-  api:
+  feeder_api:
     container_name: feeder_api
     hostname: feeder_api
     build:
@@ -32,7 +32,7 @@ services:
       - "5000:5000"
     volumes:
       - ./:/opt/dci-feeder:Z
-  rsyncd_sshd:
+  feeder_rsyncd_sshd:
     container_name: feeder_rsyncd_sshd
     hostname: feeder_rsyncd_sshd
     build:

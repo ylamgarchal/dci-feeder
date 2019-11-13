@@ -29,10 +29,15 @@ LOG = get_task_logger(__name__)
 @app.task()
 def sync(topic_name, task_id):
     LOG.info("sync topic %s" % topic_name)
-    LOG.info("pull from rsyncd")
+    LOG.info("pull from internal repo through rsyncd")
     handlers = (rsync.progress_status_handler, rsync.celery_log_handler)
-    rsync.run('root@rsyncd_sshd::compose/', '/opt/compose_cache', handlers)
-    rsync.run('/opt/compose_cache', 'root@rsyncd_sshd:/opt/compose', handlers)
+    rsync.run('root@feeder_rsyncd_sshd::compose/',
+              '/opt/compose_cache',
+              handlers)
+    LOG.info("push to external repo through ssh")
+    rsync.run('/opt/compose_cache',
+              'root@feeder_rsyncd_sshd:/opt/compose',
+              handlers)
     requests.post("%s/rhel/_events" % s.API_URL,
                   json={"event": "SYNC_SUCCESS",
                         "topic": topic_name,

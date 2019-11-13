@@ -21,9 +21,9 @@ import time
 
 def test_sync():
 
-    subprocess.check_output(["ssh", "root@rsyncd_sshd", "rm -rf", "-rf",
+    subprocess.check_output(["ssh", "root@feeder_rsyncd_sshd", "rm -rf", "-rf",
                              "/opt/compose/compose_cache"])
-    ls = subprocess.check_output(["ssh", "root@rsyncd_sshd", "ls",
+    ls = subprocess.check_output(["ssh", "root@feeder_rsyncd_sshd", "ls",
                                   "/opt/compose"])
     assert ls == ""
 
@@ -37,7 +37,7 @@ def test_sync():
         current_status = status.json()["status"]
         time.sleep(1)
 
-    diff = subprocess.check_output(["ssh", "root@rsyncd_sshd", "diff", "-r",
-                                    "/opt/compose/compose_cache",
+    diff = subprocess.check_output(["ssh", "root@feeder_rsyncd_sshd", "diff",
+                                    "-r", "/opt/compose/compose_cache",
                                     "/opt/dci-feeder/tests/e2e/data/rhel/compose"])  # noqa
     assert diff == ""

@@ -10,7 +10,7 @@ COPY requirements.txt /opt/dci-feeder/
 
 RUN yum -y install epel-release && \
     yum -y install python2-pip python2-setuptools \
-    yum -y install python34 python34-devel python34-pip python34-setuptools && \
+    yum -y install python36 python36-devel python36-pip python36-setuptools && \
     yum -y install rsync openssh-clients.x86_64 && \
     yum clean all && \
     pip install --no-cache-dir -U pip && \
