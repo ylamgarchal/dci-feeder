@@ -30,4 +30,4 @@ ENV PYTHONPATH /opt/dci-feeder
 
 EXPOSE 5000
 
-ENTRYPOINT /opt/dci-feeder/bin/runserver.py
+ENTRYPOINT /opt/dci-feeder/bin/rundevserver

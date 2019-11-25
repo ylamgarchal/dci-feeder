@@ -24,7 +24,7 @@ readme = open(os.path.join(root_dir, 'README.md')).read()
 setuptools.setup(
     name='dcifeeder',
     version='0.0.1',
-    packages=setuptools.find_packages(exclude=("tests", "tests.common",)),
+    packages=setuptools.find_packages(exclude=("tests")),
     author='Distributed CI team',
     author_email='distributed-ci@redhat.com',
     description='DCI Feeder',

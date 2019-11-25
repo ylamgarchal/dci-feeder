@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) Red Hat, Inc
@@ -15,10 +15,16 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import sys
 from dcifeeder import app
-from dcifeeder import settings as s
 
 
 if __name__ == '__main__':
-    feederapp = app.create_app()
-    feederapp.run(debug=s.API_DEBUG, threaded=True, host='0.0.0.0')
+    _usage = 'Usage: %s start|stop|restart' % sys.argv[0]
+    if len(sys.argv) < 2:
+        print(_usage)
+        sys.exit(1)
+    if sys.argv[1] not in ('start', 'stop', 'restart'):
+        print(_usage)
+        sys.exit(1)
+    app.runserver(sys.argv[1])

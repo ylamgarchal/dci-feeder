@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 Type=forking
-User=yassine
-Group=yassine
+User=dci
+Group=dci
 EnvironmentFile=/etc/conf.d/celery
 WorkingDirectory=/opt/dci-feeder/dcifeeder
 PIDFile=${CELERYD_PID_FILE}
